@@ -1003,6 +1003,7 @@ import {
 import {
   getAuth, setPersistence, browserSessionPersistence,
   createUserWithEmailAndPassword, signInWithEmailAndPassword, updatePassword,
+  EmailAuthProvider, reauthenticateWithCredential, reauthenticateWithPopup,
   GoogleAuthProvider, signInWithPopup, sendEmailVerification, signOut as authSignOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
@@ -1032,7 +1033,9 @@ analyticsSupported().then((ok) => { if (ok) { try { getAnalytics(app); } catch (
 
 window.__soulsync = {
   db, collection, doc, setDoc, getDoc, getDocs, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, deleteDoc, limit,
-  auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updatePassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification, authSignOut,
+  auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updatePassword,
+  EmailAuthProvider, reauthenticateWithCredential, reauthenticateWithPopup,
+  GoogleAuthProvider, signInWithPopup, sendEmailVerification, authSignOut,
   rtdb, rtdbRef, onValue, rtdbSet, onDisconnect, rtdbRemove, rtdbServerTimestamp
 };
 window.dispatchEvent(new Event('soulsync-firebase-ready'));
@@ -1210,7 +1213,8 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
   }
 
   /* ═══════════════ Step 1: verify a real email (Gmail or email+password) before creating a room ═══════════════ */
-  let pendingVerifiedAuth = null; // { uid, email }
+  let pendingVerifiedAuth = null; // { uid, email, method: 'password'|'google' }
+  let pendingStep1Password = null; // holds the verification-step password only until reauth uses it
 
   async function checkAccountAlreadyUsed(uidVal) {
     const fb = await fsReady();
@@ -1227,7 +1231,7 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
       showAuthError('verify-error', 'This email already has a room — log in with your username instead.');
       return;
     }
-    pendingVerifiedAuth = { uid: uidVal, email };
+    pendingVerifiedAuth = { uid: uidVal, email, method: pendingStep1Password ? 'password' : 'google' };
     document.getElementById('verify-step-pending').classList.add('hidden');
     document.getElementById('verify-step-choose').classList.remove('hidden');
     showScreen('screen-signup');
@@ -1235,6 +1239,7 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
 
   document.getElementById('btn-google-signup').addEventListener('click', async () => {
     clearAuthError('verify-error');
+    pendingStep1Password = null;
     try {
       const fb = await fsReady();
       const provider = new fb.GoogleAuthProvider();
@@ -1253,6 +1258,7 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
     setErr('f-verify-email', !validEmail);
     setErr('f-verify-password', password.length < 6);
     if (!validEmail || password.length < 6) return;
+    pendingStep1Password = password;
 
     const btn = document.getElementById('btn-email-signup');
     btn.disabled = true; btn.textContent = 'Please wait…';
@@ -1346,6 +1352,24 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
       const isAdmin = ADMIN_USERNAMES.includes(username);
       const roomId = uid(9);
       const fb = await fsReady();
+
+      // Firebase requires a *recent* sign-in before allowing a password change — the gap while
+      // waiting for the verification email (esp. if it lands in spam) is usually too long, so
+      // we reauthenticate first using whichever method was used to verify the email originally.
+      try {
+        if (pendingVerifiedAuth.method === 'password' && pendingStep1Password) {
+          const authCred = fb.EmailAuthProvider.credential(pendingVerifiedAuth.email, pendingStep1Password);
+          await fb.reauthenticateWithCredential(fb.auth.currentUser, authCred);
+        } else {
+          await fb.reauthenticateWithPopup(fb.auth.currentUser, new fb.GoogleAuthProvider());
+        }
+      } catch (reauthErr) {
+        showAuthError('signup-error', "Your session timed out — please verify your email again.");
+        pendingVerifiedAuth = null; pendingStep1Password = null;
+        showScreen('screen-verify');
+        return;
+      }
+      pendingStep1Password = null;
 
       // The username+password chosen here becomes the real Firebase Auth password
       // (the verification-step password was only ever needed to prove the email once).
