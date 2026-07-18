@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Honey Gonna Chat — Admin</title>
+<style>
+  :root{
+    --bg:#0e0512; --panel:#170a1e; --border:#3a2247; --pink:#ec6fb0; --pink-hi:#ff8fc7;
+    --purple:#9b6bff; --text:#f1e9f6; --muted:#a596ae; --danger:#ff6b6b; --ok:#57d68d;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:radial-gradient(circle at 20% 0%, #2a1233, var(--bg));color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;min-height:100vh;}
+  .wrap{max-width:720px;margin:0 auto;padding:24px 18px 60px;}
+  h1{font-size:22px;background:linear-gradient(90deg,var(--pink-hi),var(--purple));
+    -webkit-background-clip:text;background-clip:text;color:transparent;margin:0 0 4px;}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 24px;}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;}
+  label{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:12px 0 6px;}
+  input,textarea{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--border);
+    background:#1c0e24;color:var(--text);font-size:14px;font-family:inherit;}
+  textarea{resize:vertical;min-height:70px;}
+  button{cursor:pointer;border:none;border-radius:10px;padding:11px 16px;font-size:14px;font-weight:600;
+    background:linear-gradient(90deg,var(--pink),var(--purple));color:#fff;}
+  button.secondary{background:transparent;border:1px solid var(--border);color:var(--text);}
+  button.danger{background:transparent;border:1px solid var(--danger);color:var(--danger);}
+  button:disabled{opacity:.5;cursor:default;}
+  .row{display:flex;gap:10px;flex-wrap:wrap;}
+  .err{color:var(--danger);font-size:13px;margin-top:8px;}
+  .hidden{display:none !important;}
+  .tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+  .tab{padding:8px 14px;border-radius:20px;border:1px solid var(--border);font-size:13px;cursor:pointer;color:var(--muted);}
+  .tab.active{background:var(--purple);color:#fff;border-color:transparent;}
+  .item{border-bottom:1px solid var(--border);padding:12px 0;}
+  .item:last-child{border-bottom:none;}
+  .item-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;}
+  .item-meta{color:var(--muted);font-size:11.5px;}
+  .badge{font-size:10.5px;padding:2px 8px;border-radius:8px;background:rgba(155,107,255,.2);color:var(--purple);}
+  .badge.open{background:rgba(255,107,107,.18);color:var(--danger);}
+  .badge.resolved{background:rgba(87,214,141,.18);color:var(--ok);}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .stat{background:#1c0e24;border-radius:12px;padding:14px;text-align:center;}
+  .stat .n{font-size:26px;font-weight:700;color:var(--pink-hi);}
+  .stat .l{font-size:11px;color:var(--muted);margin-top:2px;}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  a.logout{color:var(--muted);font-size:12.5px;cursor:pointer;text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="screen-login">
+    <h1>Honey Gonna Chat</h1>
+    <p class="sub">Admin dashboard — sign in with your admin account.</p>
+    <div class="card">
+      <label>Username</label>
+      <input type="text" id="admin-username" placeholder="gautam or hemane" autocomplete="username">
+      <label>Password</label>
+      <input type="password" id="admin-password" placeholder="Your app password" autocomplete="current-password">
+      <div class="row" style="margin-top:16px;">
+        <button id="btn-admin-login">Log in</button>
+      </div>
+      <div class="err hidden" id="login-err"></div>
+    </div>
+  </div>
+
+  <div id="screen-dash" class="hidden">
+    <div class="topbar">
+      <h1 style="margin-bottom:0;">Admin dashboard</h1>
+      <a class="logout" id="btn-logout">Log out</a>
+    </div>
+    <p class="sub" id="welcome-line"></p>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="overview">Overview</div>
+      <div class="tab" data-tab="broadcasts">Broadcasts</div>
+      <div class="tab" data-tab="tickets">Support</div>
+      <div class="tab" data-tab="system">System</div>
+    </div>
+
+    <div id="tab-overview" class="tab-panel">
+      <div class="card">
+        <div class="stat-grid">
+          <div class="stat"><div class="n" id="stat-rooms">–</div><div class="l">Total rooms</div></div>
+          <div class="stat"><div class="n" id="stat-tickets-open">–</div><div class="l">Open tickets</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <label style="margin-top:0;">Recent rooms (metadata only — messages stay private)</label>
+        <div id="rooms-list"><p class="sub">Loading…</p></div>
+      </div>
+    </div>
+
+    <div id="tab-broadcasts" class="tab-panel hidden">
+      <div class="card">
+        <label style="margin-top:0;">Send a broadcast</label>
+        <textarea id="broadcast-text" placeholder="Message shown to every couple…"></textarea>
+        <div class="row" style="margin-top:10px;">
+          <button id="btn-send-broadcast">Send broadcast</button>
+        </div>
+      </div>
+      <div class="card">
+        <label style="margin-top:0;">Sent broadcasts</label>
+        <div id="broadcasts-list"><p class="sub">Loading…</p></div>
+      </div>
+    </div>
+
+    <div id="tab-tickets" class="tab-panel hidden">
+      <div class="card">
+        <label style="margin-top:0;">Support tickets</label>
+        <div id="tickets-list"><p class="sub">Loading…</p></div>
+      </div>
+    </div>
+
+    <div id="tab-system" class="tab-panel hidden">
+      <div class="card">
+        <label style="margin-top:0;">Maintenance mode</label>
+        <p class="sub" style="margin:0 0 10px;">When on, non-admin users see a "heavy load, try again later" screen instead of the app. Your own admin login always still works.</p>
+        <div class="row" style="align-items:center;margin-bottom:10px;">
+          <span id="maintenance-state" class="badge open">Checking…</span>
+        </div>
+        <label>Message shown to users (optional)</label>
+        <textarea id="maintenance-msg" placeholder="We've temporarily paused new activity while things settle down. Please try again in about an hour."></textarea>
+        <div class="row" style="margin-top:10px;">
+          <button id="btn-maintenance-on" class="danger">Turn ON</button>
+          <button id="btn-maintenance-off" class="secondary">Turn OFF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getAuth, setPersistence, browserSessionPersistence,
+  createUserWithEmailAndPassword, signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, query,
+  orderBy, deleteDoc, limit
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDDYYyECxxcvXJm3hNYJFnlRJZDDaArYTs",
+  authDomain: "imucet-32224.firebaseapp.com",
+  databaseURL: "https://imucet-32224-default-rtdb.firebaseio.com",
+  projectId: "imucet-32224",
+  storageBucket: "imucet-32224.firebasestorage.app",
+  messagingSenderId: "666845893984",
+  appId: "1:666845893984:web:94086ac4e4ae4d485f7a05",
+  measurementId: "G-74NHN8VV4W"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+setPersistence(auth, browserSessionPersistence).catch(() => {});
+
+const ADMIN_UIDS = ['ORKHNrMyR0TJXmQKIrWR2XThp8D3', 'GbK90OSEJJVLutjv79X5gHzbM5G2'];
+const ADMIN_USERNAMES = ['gautam', 'hemane'];
+
+function $(id) { return document.getElementById(id); }
+function showErr(el, msg) { el.textContent = msg; el.classList.remove('hidden'); }
+function clearErr(el) { el.classList.add('hidden'); el.textContent = ''; }
+
+async function getUsernameIndex(username) {
+  const snap = await getDoc(doc(db, 'usernameIndex', username));
+  return snap.exists() ? snap.data() : null;
+}
+
+$('btn-admin-login').addEventListener('click', async () => {
+  const errEl = $('login-err');
+  clearErr(errEl);
+  const username = $('admin-username').value.trim().toLowerCase();
+  const password = $('admin-password').value;
+  if (!ADMIN_USERNAMES.includes(username)) { showErr(errEl, 'This account is not an admin account.'); return; }
+  if (!password) { showErr(errEl, 'Enter your password.'); return; }
+
+  const btn = $('btn-admin-login');
+  btn.disabled = true; btn.textContent = 'Logging in…';
+  try {
+    const idx = await getUsernameIndex(username);
+    let cred;
+    if (!idx) {
+      // First-ever admin login bootstraps the account, mirroring the main app's admin bootstrap
+      const adminEmail = username + '@honeygonnachat.internal';
+      try {
+        cred = await createUserWithEmailAndPassword(auth, adminEmail, password);
+      } catch (e) {
+        if (e.code === 'auth/email-already-in-use') {
+          cred = await signInWithEmailAndPassword(auth, adminEmail, password);
+        } else { throw e; }
+      }
+      await setDoc(doc(db, 'usernameIndex', username), { email: adminEmail });
+    } else {
+      cred = await signInWithEmailAndPassword(auth, idx.email, password);
+    }
+    if (!ADMIN_UIDS.includes(cred.user.uid)) {
+      showErr(errEl, "This account isn't authorized for admin access.");
+      btn.disabled = false; btn.textContent = 'Log in';
+      return;
+    }
+    $('welcome-line').textContent = 'Signed in as ' + (username === 'gautam' ? 'Gautam' : 'Hemane') + '.';
+    $('screen-login').classList.add('hidden');
+    $('screen-dash').classList.remove('hidden');
+    loadOverview();
+  } catch (e) {
+    showErr(errEl, 'Login failed — check your password and try again.');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Log in';
+  }
+});
+
+$('btn-logout').addEventListener('click', () => {
+  auth.signOut().catch(() => {});
+  $('screen-dash').classList.add('hidden');
+  $('screen-login').classList.remove('hidden');
+  $('admin-password').value = '';
+});
+
+/* Tabs */
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(x => x.classList.add('hidden'));
+    t.classList.add('active');
+    $('tab-' + t.dataset.tab).classList.remove('hidden');
+    if (t.dataset.tab === 'broadcasts') loadBroadcasts();
+    if (t.dataset.tab === 'tickets') loadTickets();
+    if (t.dataset.tab === 'system') loadSystemStatus();
+  });
+});
+
+function timeAgo(ts) {
+  if (!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleString();
+}
+
+/* Overview */
+async function loadOverview() {
+  try {
+    const roomsSnap = await getDocs(query(collection(db, 'rooms'), orderBy('createdAt', 'desc'), limit(20)));
+    $('stat-rooms').textContent = roomsSnap.size < 20 ? roomsSnap.size : '20+';
+    const list = $('rooms-list');
+    if (roomsSnap.empty) { list.innerHTML = '<p class="sub">No rooms yet.</p>'; }
+    else {
+      list.innerHTML = '';
+      roomsSnap.forEach(d => {
+        const r = d.data();
+        const row = document.createElement('div');
+        row.className = 'item';
+        row.innerHTML = '<div class="item-top"><strong>' + (r.yourName || '?') + ' &amp; ' + (r.partnerName || '?') +
+          '</strong><span class="item-meta">' + timeAgo(r.createdAt) + '</span></div>' +
+          '<div class="item-meta">Room: ' + d.id + '</div>';
+        list.appendChild(row);
+      });
+    }
+  } catch (e) { $('rooms-list').innerHTML = '<p class="sub">Could not load rooms.</p>'; }
+
+  try {
+    const openSnap = await getDocs(query(collection(db, 'supportTickets'), orderBy('createdAt', 'desc'), limit(50)));
+    let open = 0;
+    openSnap.forEach(d => { if (!d.data().resolved) open++; });
+    $('stat-tickets-open').textContent = open;
+  } catch (e) { $('stat-tickets-open').textContent = '–'; }
+}
+
+/* Broadcasts */
+$('btn-send-broadcast').addEventListener('click', async () => {
+  const text = $('broadcast-text').value.trim();
+  if (!text) return;
+  const btn = $('btn-send-broadcast');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    await addDoc(collection(db, 'broadcasts'), { message: text, createdAt: Date.now(), sentBy: auth.currentUser.email });
+    $('broadcast-text').value = '';
+    loadBroadcasts();
+  } catch (e) { alert("Couldn't send broadcast."); }
+  finally { btn.disabled = false; btn.textContent = 'Send broadcast'; }
+});
+
+async function loadBroadcasts() {
+  const list = $('broadcasts-list');
+  list.innerHTML = '<p class="sub">Loading…</p>';
+  try {
+    const snap = await getDocs(query(collection(db, 'broadcasts'), orderBy('createdAt', 'desc'), limit(30)));
+    if (snap.empty) { list.innerHTML = '<p class="sub">No broadcasts sent yet.</p>'; return; }
+    list.innerHTML = '';
+    snap.forEach(d => {
+      const b = d.data();
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = '<div class="item-top"><span>' + (b.message || '') + '</span></div>' +
+        '<div class="item-meta">' + timeAgo(b.createdAt) + '</div>';
+      const delBtn = document.createElement('button');
+      delBtn.className = 'danger'; delBtn.textContent = 'Delete'; delBtn.style.marginTop = '8px';
+      delBtn.addEventListener('click', async () => {
+        if (!confirm('Delete this broadcast?')) return;
+        await deleteDoc(doc(db, 'broadcasts', d.id));
+        loadBroadcasts();
+      });
+      row.appendChild(delBtn);
+      list.appendChild(row);
+    });
+  } catch (e) { list.innerHTML = '<p class="sub">Could not load broadcasts.</p>'; }
+}
+
+/* System / maintenance mode */
+async function loadSystemStatus() {
+  const badge = $('maintenance-state');
+  badge.textContent = 'Checking…';
+  try {
+    const snap = await getDoc(doc(db, 'system', 'status'));
+    const data = snap.exists() ? snap.data() : {};
+    const on = !!data.maintenanceMode;
+    badge.textContent = on ? 'Currently ON' : 'Currently OFF';
+    badge.className = 'badge ' + (on ? 'open' : 'resolved');
+    $('maintenance-msg').value = data.maintenanceMessage || '';
+  } catch (e) { badge.textContent = 'Could not load status'; }
+}
+$('btn-maintenance-on').addEventListener('click', async () => {
+  await setDoc(doc(db, 'system', 'status'), {
+    maintenanceMode: true,
+    maintenanceMessage: $('maintenance-msg').value.trim() || null,
+    updatedAt: Date.now()
+  }, { merge: true });
+  loadSystemStatus();
+});
+$('btn-maintenance-off').addEventListener('click', async () => {
+  await setDoc(doc(db, 'system', 'status'), { maintenanceMode: false, updatedAt: Date.now() }, { merge: true });
+  loadSystemStatus();
+});
+
+/* Support tickets */
+async function loadTickets() {
+  const list = $('tickets-list');
+  list.innerHTML = '<p class="sub">Loading…</p>';
+  try {
+    const snap = await getDocs(query(collection(db, 'supportTickets'), orderBy('createdAt', 'desc'), limit(50)));
+    if (snap.empty) { list.innerHTML = '<p class="sub">No tickets.</p>'; return; }
+    list.innerHTML = '';
+    snap.forEach(d => {
+      const t = d.data();
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = '<div class="item-top"><span>' + (t.message || t.subject || 'Ticket') +
+        '</span><span class="badge ' + (t.resolved ? 'resolved' : 'open') + '">' + (t.resolved ? 'Resolved' : 'Open') + '</span></div>' +
+        '<div class="item-meta">' + timeAgo(t.createdAt) + (t.username ? ' · ' + t.username : '') + '</div>';
+      if (!t.resolved) {
+        const resolveBtn = document.createElement('button');
+        resolveBtn.className = 'secondary'; resolveBtn.textContent = 'Mark resolved'; resolveBtn.style.marginTop = '8px';
+        resolveBtn.addEventListener('click', async () => {
+          await setDoc(doc(db, 'supportTickets', d.id), { resolved: true }, { merge: true });
+          loadTickets();
+        });
+        row.appendChild(resolveBtn);
+      }
+      list.appendChild(row);
+    });
+  } catch (e) { list.innerHTML = '<p class="sub">Could not load tickets.</p>'; }
+}
+</script>
+</body>
+</html>
