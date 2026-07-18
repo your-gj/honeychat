@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-     <meta name="google-site-verification" content="SJlm6IRzlJ6pzNNNpt2skmkyXjl6rOk-4fu8CxN_ok0" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
 <meta name="theme-color" content="#0c0818">
@@ -264,6 +263,19 @@ button { font-family: inherit; }
 .tc-row button.link-btn { background: none; border: none; color: var(--pink-hi); text-decoration: underline; cursor: pointer; padding: 0; font-size: 12.5px; }
 
 .age-note { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.share-note { font-size: 11.5px; color: var(--muted); line-height: 1.6; margin: 2px 0 4px; }
+
+.whoami-btn {
+  width: 100%; display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,0.03); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px 18px; margin-bottom: 12px;
+  cursor: pointer; text-align: left; transition: border-color 0.2s var(--ease-smooth), transform 0.2s var(--ease-smooth), background 0.2s var(--ease-smooth);
+}
+.whoami-btn:active { transform: scale(0.98); }
+.whoami-btn:hover { border-color: var(--border-hi); background: rgba(255,255,255,0.05); }
+.whoami-btn .wa-emoji { font-size: 26px; flex-shrink: 0; }
+.whoami-btn .wa-name { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 500; color: var(--text); }
+.whoami-note { font-size: 11.5px; color: var(--muted); text-align: center; margin-top: 4px; }
 
 #turnstile-slot { margin: 14px 0 4px; min-height: 4px; }
 
@@ -279,6 +291,44 @@ button { font-family: inherit; }
 
 .auth-switch { text-align: center; font-size: 12.5px; color: var(--muted); margin-top: 18px; }
 .auth-switch button { background: none; border: none; color: var(--pink-hi); cursor: pointer; font-size: 12.5px; text-decoration: underline; padding: 0; }
+
+.btn-google {
+  width: 100%; padding: 12px; border-radius: var(--radius-sm); cursor: pointer;
+  background: #fff; color: #2b2b2b; border: none; font-size: 14px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  transition: transform 0.15s var(--ease-smooth);
+}
+.btn-google:active { transform: scale(0.98); }
+.btn-google .g-icon {
+  width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg,#4285F4,#34A853,#FBBC05,#EA4335);
+  color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;
+}
+.or-divider { display: flex; align-items: center; gap: 10px; margin: 16px 0; color: var(--muted); font-size: 11.5px; }
+.or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.link-btn-full { width: 100%; background: none; border: none; color: var(--muted); text-decoration: underline; font-size: 12px; padding: 10px 0 0; cursor: pointer; }
+
+/* ── Read receipt ticks ── */
+.msg-ticks { display: inline-flex; margin-left: 4px; vertical-align: middle; }
+.msg-ticks svg { display: block; }
+.msg-ticks.read svg path { stroke: #6fd0ff; }
+
+/* ── Presence + typing ── */
+.dot-online.offline { background: var(--muted-lo); box-shadow: none; }
+.typing-text { color: var(--pink-hi); font-style: italic; }
+
+/* ── Broadcast banner ── */
+.broadcast-banner {
+  display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; margin: 10px 14px 0;
+  background: linear-gradient(120deg, rgba(236,111,176,0.14), rgba(155,110,224,0.14));
+  border: 1px solid var(--border-hi); border-radius: var(--radius-sm); font-size: 12.5px; color: var(--text);
+}
+.broadcast-banner .bb-icon { font-size: 16px; flex-shrink: 0; }
+.broadcast-banner button { background: none; border: none; color: var(--muted); font-size: 16px; cursor: pointer; padding: 0; margin-left: auto; line-height: 1; }
+
+/* ── Support / admin panel bits ── */
+.ticket-item { background: var(--glass); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 10px; font-size: 12.5px; }
+.ticket-item .t-meta { color: var(--muted); font-size: 11px; margin-bottom: 4px; }
+.broadcast-compose textarea { width: 100%; min-height: 70px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; color: var(--text); font-family: inherit; font-size: 13px; resize: vertical; }
 
 .auth-error { background: rgba(236,111,176,0.1); border: 1px solid rgba(236,111,176,0.3); color: var(--pink-hi); border-radius: var(--radius-xs); padding: 10px 12px; font-size: 12.5px; margin-bottom: 14px; display: none; }
 .auth-error.show { display: block; animation: fadeUp 0.3s var(--ease-spring) both; }
@@ -379,6 +429,38 @@ button { font-family: inherit; }
   box-shadow: 0 4px 16px var(--glow); transition: transform 0.15s var(--ease-smooth);
 }
 .send-btn:active { transform: scale(0.92); }
+.send-btn.recording { background: linear-gradient(120deg, #ff4d6d, #c23e93); }
+
+/* ── Voice recording bar ── */
+.recording-bar {
+  position: fixed; left: 0; right: 0; bottom: var(--input-h); z-index: 7;
+  display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+  background: rgba(21,15,36,0.95); backdrop-filter: blur(14px); border-top: 1px solid var(--border-hi);
+}
+.rec-dot { width: 9px; height: 9px; border-radius: 50%; background: #ff4d6d; flex-shrink: 0; animation: recPulse 1s ease-in-out infinite; }
+@keyframes recPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+#rec-timer { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--text); flex-shrink: 0; }
+.rec-hint { font-size: 11.5px; color: var(--muted); flex: 1; }
+.rec-cancel, .rec-stop { border: none; border-radius: 30px; padding: 7px 14px; font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.rec-cancel { background: rgba(255,255,255,0.06); color: var(--muted-hi); }
+.rec-stop { background: linear-gradient(120deg, var(--pink), var(--purple)); color: #fff; }
+
+/* ── Image + voice bubbles ── */
+.bubble.image-bubble { padding: 5px; background: transparent !important; border: none !important; }
+.bubble.image-bubble img { max-width: 220px; max-height: 280px; border-radius: 14px; display: block; object-fit: cover; }
+.msg-row.you .bubble.image-bubble img { box-shadow: 0 0 0 2px rgba(236,111,176,0.4); }
+.msg-row.them .bubble.image-bubble img { box-shadow: 0 0 0 1px var(--border); }
+.bubble .img-meta { font-size: 9.5px; color: var(--muted); margin-top: 4px; text-align: right; }
+.voice-bubble { display: flex; align-items: center; gap: 10px; min-width: 170px; }
+.voice-bubble audio { height: 32px; max-width: 190px; }
+
+/* ── Exam countdown ── */
+.exam-card { background: var(--glass); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; margin-top: 14px; text-align: center; }
+.exam-card .ec-days { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 500; color: var(--pink-hi); }
+.exam-card .ec-label { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.exam-form { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.exam-form input { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; color: var(--text); font-size: 13px; font-family: inherit; }
+.exam-form button { background: linear-gradient(120deg, var(--pink), var(--purple)); border: none; color: #fff; border-radius: 10px; padding: 9px; font-size: 13px; font-weight: 600; cursor: pointer; }
 
 /* ═══════════════════════════════════════════════════
    MENU DRAWER
@@ -550,6 +632,48 @@ button { font-family: inherit; }
 </div>
 
 <!-- ═══════════════════════════════════════════════════
+     SCREEN: VERIFY EMAIL (step 1 of signup)
+═══════════════════════════════════════════════════ -->
+<div id="screen-verify" class="screen hidden">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <img src="data:image/jpeg;base64,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" alt="Honey Gonna Chat logo">
+      <h1>Verify it's really you</h1>
+      <div class="auth-tag">One real email per room — keeps this space genuine</div>
+    </div>
+
+    <div class="auth-card">
+      <div id="verify-error" class="auth-error"></div>
+
+      <div id="verify-step-choose">
+        <button class="btn-google" id="btn-google-signup" type="button"><span class="g-icon">G</span> Continue with Gmail</button>
+        <div class="or-divider"><span>or use email + password</span></div>
+        <div class="field" id="f-verify-email">
+          <label for="verify-email">Email address</label>
+          <input type="email" id="verify-email" autocomplete="email" placeholder="you@gmail.com">
+          <div class="err">Enter a valid email address.</div>
+        </div>
+        <div class="field" id="f-verify-password">
+          <label for="verify-password">Create a password</label>
+          <input type="password" id="verify-password" autocomplete="new-password" placeholder="At least 6 characters">
+          <div class="err">Password must be at least 6 characters.</div>
+        </div>
+        <button class="btn-primary" id="btn-email-signup" type="button">Continue with email</button>
+      </div>
+
+      <div id="verify-step-pending" class="hidden">
+        <p class="share-note">We sent a verification link to <strong id="verify-pending-email"></strong>. Open it, then come back and tap below.</p>
+        <button class="btn-primary" id="btn-verify-recheck" type="button">I've verified my email</button>
+        <button class="link-btn-full" id="btn-verify-resend" type="button">Resend email</button>
+      </div>
+
+      <div class="auth-switch">Already have a room? <button id="go-login-from-verify">Log in</button></div>
+    </div>
+    <div class="auth-footer">Made by Hemane and Gautam Jaiswal · Honey Gonna Chat</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
      SCREEN: SIGN UP
 ═══════════════════════════════════════════════════ -->
 <div id="screen-signup" class="screen hidden">
@@ -562,16 +686,41 @@ button { font-family: inherit; }
 
     <div class="auth-card">
       <h2>Get started</h2>
-      <div class="sub">One room, two links, just the two of you.</div>
+      <div class="sub">One shared login, one private room — just the two of you.</div>
       <div id="signup-error" class="auth-error"></div>
 
       <div class="field" id="f-name">
-        <label for="su-name">Name</label>
+        <label for="su-name">Your name</label>
         <input type="text" id="su-name" autocomplete="name" placeholder="Your name">
         <div class="err">Please enter your name.</div>
       </div>
+      <div class="field" id="f-gender">
+        <label for="su-gender">Your gender</label>
+        <select id="su-gender">
+          <option value="">Select</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="other">Other</option>
+        </select>
+        <div class="err">Please select your gender.</div>
+      </div>
+      <div class="field" id="f-partner-name">
+        <label for="su-partner-name">Partner's name</label>
+        <input type="text" id="su-partner-name" autocomplete="off" placeholder="Their name">
+        <div class="err">Please enter your partner's name.</div>
+      </div>
+      <div class="field" id="f-partner-gender">
+        <label for="su-partner-gender">Partner's gender</label>
+        <select id="su-partner-gender">
+          <option value="">Select</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+          <option value="other">Other</option>
+        </select>
+        <div class="err">Please select your partner's gender.</div>
+      </div>
       <div class="field" id="f-age">
-        <label for="su-age">Age</label>
+        <label for="su-age">Your age</label>
         <input type="number" id="su-age" min="1" max="120" placeholder="Your age">
         <div class="err">You must be 18 or older to use Honey Gonna Chat.</div>
         <div class="age-note">Honey Gonna Chat is an 18+ space.</div>
@@ -586,6 +735,7 @@ button { font-family: inherit; }
         <input type="password" id="su-password" autocomplete="new-password" placeholder="Choose a password">
         <div class="err">Password must be at least 6 characters.</div>
       </div>
+      <p class="share-note">Share this one username &amp; password with your partner — they'll use the same login to open their side.</p>
 
       <div class="tc-row">
         <input type="checkbox" id="tc-check">
@@ -605,35 +755,28 @@ button { font-family: inherit; }
 </div>
 
 <!-- ═══════════════════════════════════════════════════
-     SCREEN: LINKS REVEAL (after signup)
+     SCREEN: WHO'S CHATTING (after signup or login)
 ═══════════════════════════════════════════════════ -->
-<div id="screen-links" class="screen hidden">
+<div id="screen-whoami" class="screen hidden">
   <div class="auth-wrap">
     <div class="auth-logo">
       <img src="data:image/jpeg;base64,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" alt="Honey Gonna Chat logo">
-      <h1>Your room is ready</h1>
-      <div class="auth-tag">Save these — they never expire</div>
+      <h1>Who's chatting?</h1>
+      <div class="auth-tag">Tap your name to open your side</div>
     </div>
 
     <div class="auth-card">
-      <h2>Two links, one room</h2>
-      <div class="sub">Keep your link for yourself. Send the partner link to the person you're building this with.</div>
-
-      <div class="link-card">
-        <div class="who">Your link (owner)</div>
-        <div class="url" id="link-owner">—</div>
-        <button class="copy-btn" data-copy="link-owner">Copy</button>
-      </div>
-      <div class="link-card">
-        <div class="who">Partner's link</div>
-        <div class="url" id="link-partner">—</div>
-        <button class="copy-btn" data-copy="link-partner">Copy</button>
-      </div>
-
-      <div class="link-warn">Both links stay open indefinitely — there's no expiry. Anyone with a link can log in with their own username and password to enter this room, so only share the partner link with the one person it's meant for.</div>
-
-      <button class="btn-primary" id="btn-enter-app">Enter Honey Gonna Chat</button>
+      <button class="whoami-btn" id="whoami-btn-you">
+        <span class="wa-emoji" id="whoami-you-emoji">👤</span>
+        <span class="wa-name" id="whoami-you-name">You</span>
+      </button>
+      <button class="whoami-btn" id="whoami-btn-partner">
+        <span class="wa-emoji" id="whoami-partner-emoji">👤</span>
+        <span class="wa-name" id="whoami-partner-name">Partner</span>
+      </button>
+      <div class="whoami-note">You can switch anytime from the menu.</div>
     </div>
+    <div class="auth-footer">Made by Hemane and Gautam Jaiswal · Honey Gonna Chat</div>
   </div>
 </div>
 
@@ -651,12 +794,22 @@ button { font-family: inherit; }
     <button class="icon-btn" id="btn-menu" title="Menu">☰</button>
   </div>
 
+  <div id="broadcast-slot"></div>
   <div class="thread" id="thread"></div>
 
   <div class="inputbar">
-    <button class="icon-btn" id="btn-attach" title="Photo — coming soon">📎</button>
+    <input type="file" id="file-image" accept="image/*" class="hidden">
+    <button class="icon-btn" id="btn-attach" title="Send a photo (3 per day)">📎</button>
     <textarea id="msg-input" rows="1" placeholder="Type a message…" maxlength="2000"></textarea>
+    <button class="icon-btn" id="btn-mic" title="Record a voice note (max 2:00)">🎤</button>
     <button class="send-btn" id="btn-send">➤</button>
+  </div>
+  <div class="recording-bar hidden" id="recording-bar">
+    <span class="rec-dot"></span>
+    <span id="rec-timer">0:00</span>
+    <span class="rec-hint">Recording… max 2:00</span>
+    <button class="rec-cancel" id="btn-rec-cancel">Cancel</button>
+    <button class="rec-stop" id="btn-rec-stop">Send</button>
   </div>
 </div>
 
@@ -673,7 +826,7 @@ button { font-family: inherit; }
 
   <div class="drawer-item" data-panel="panel-mood"><div class="di-icon">🌙</div><div><div class="di-label">Mood</div><span class="di-sub">Check in with how you feel</span></div></div>
   <div class="drawer-item" data-panel="panel-streak"><div class="di-icon">🔥</div><div><div class="di-label">Streak</div><span class="di-sub">Your daily connection streak</span></div></div>
-  <div class="drawer-item" data-panel="panel-study"><div class="di-icon">📚</div><div><div class="di-label">Study tools</div><span class="di-sub">IMUCET prep &amp; more</span></div></div>
+  <div class="drawer-item" data-panel="panel-study"><div class="di-icon">📚</div><div><div class="di-label">Study tools</div><span class="di-sub">Exam countdown &amp; goals</span></div></div>
   <div class="drawer-item" id="drawer-photos"><div class="di-icon">🖼️</div><div><div class="di-label">Photos</div><span class="di-sub">Coming soon</span></div></div>
 
   <div class="drawer-sep"></div>
@@ -683,6 +836,12 @@ button { font-family: inherit; }
 
   <div class="drawer-sep"></div>
 
+  <div class="drawer-sep"></div>
+
+  <div class="drawer-item" data-panel="panel-help"><div class="di-icon">🆘</div><div><div class="di-label">Help &amp; Support</div><span class="di-sub">Report a problem</span></div></div>
+  <div class="drawer-item hidden" id="drawer-admin" data-panel="panel-admin"><div class="di-icon">🛡️</div><div><div class="di-label">Admin dashboard</div><span class="di-sub">Tickets &amp; broadcasts</span></div></div>
+
+  <div class="drawer-item" id="drawer-switch-person"><div class="di-icon">🔄</div><div><div class="di-label">Switch person</div><span class="di-sub">Change who you're chatting as</span></div></div>
   <div class="drawer-item danger" id="btn-logout"><div class="di-icon">↩</div><div><div class="di-label">Log out</div></div></div>
 </div>
 
@@ -718,9 +877,20 @@ button { font-family: inherit; }
 <div class="panel" id="panel-study">
   <div class="panel-head"><button class="icon-btn" data-close-panel>←</button><h3>Study tools</h3></div>
   <div class="panel-body">
-    <p>Shared tools to help with IMUCET prep and daily study goals.</p>
-    <div class="study-list">
-      <div class="study-item"><div class="si-icon">🧭</div><div><div class="si-title">IMUCET countdown</div><div class="si-sub">Track days left together</div></div></div>
+    <p>Set your exam and count down together, whatever you're both working toward.</p>
+
+    <div class="exam-card hidden" id="exam-display">
+      <div class="ec-days" id="exam-days-left">—</div>
+      <div class="ec-label" id="exam-label">days left</div>
+    </div>
+
+    <div class="exam-form">
+      <input type="text" id="exam-name-input" placeholder="Exam name (e.g. IMU-CET, boards, NEET)">
+      <input type="date" id="exam-date-input">
+      <button id="btn-exam-save">Save countdown</button>
+    </div>
+
+    <div class="study-list" style="margin-top:16px;">
       <div class="study-item"><div class="si-icon">✅</div><div><div class="si-title">Daily goals</div><div class="si-sub">Set and check off study targets</div></div></div>
       <div class="study-item"><div class="si-icon">📝</div><div><div class="si-title">Shared notes</div><div class="si-sub">Coming soon</div></div></div>
     </div>
@@ -764,6 +934,34 @@ button { font-family: inherit; }
   </div>
 </div>
 
+<div class="panel" id="panel-help">
+  <div class="panel-head"><button class="icon-btn" data-close-panel>←</button><h3>Help &amp; Support</h3></div>
+  <div class="panel-body">
+    <p>Something not working, or found a problem? Tell us below — it goes straight to the people who built this.</p>
+    <div class="exam-form">
+      <textarea id="help-message" rows="5" placeholder="Describe the issue…" style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-family:inherit;font-size:13px;resize:vertical;"></textarea>
+      <button id="btn-help-send">Send to support</button>
+    </div>
+    <div id="help-sent-note" class="hidden" style="margin-top:12px;font-size:12.5px;color:var(--muted);">Thanks — we've got it and will look into it.</div>
+  </div>
+</div>
+
+<div class="panel" id="panel-admin">
+  <div class="panel-head"><button class="icon-btn" data-close-panel>←</button><h3>Admin dashboard</h3></div>
+  <div class="panel-body">
+    <p>Visible only to admin accounts.</p>
+
+    <h4 style="margin:18px 0 8px;font-size:13.5px;">Broadcast to everyone</h4>
+    <div class="broadcast-compose">
+      <textarea id="broadcast-message" placeholder="e.g. New feature: voice notes are live! 🎉"></textarea>
+      <button id="btn-broadcast-send" style="margin-top:8px;width:100%;background:linear-gradient(120deg,var(--pink),var(--purple));border:none;color:#fff;border-radius:10px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;">Send to all rooms</button>
+    </div>
+
+    <h4 style="margin:22px 0 8px;font-size:13.5px;">Support tickets</h4>
+    <div id="ticket-list"><p style="color:var(--muted);font-size:12.5px;">Loading…</p></div>
+  </div>
+</div>
+
 <!-- T&C Modal -->
 <div class="modal-overlay" id="tc-modal">
   <div class="modal-box">
@@ -802,6 +1000,15 @@ import {
   getFirestore, collection, doc, setDoc, getDoc, getDocs, addDoc, query,
   where, orderBy, onSnapshot, serverTimestamp, deleteDoc, limit
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {
+  getAuth, setPersistence, browserSessionPersistence,
+  createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  GoogleAuthProvider, signInWithPopup, sendEmailVerification, signOut as authSignOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getDatabase, ref as rtdbRef, onValue, set as rtdbSet, onDisconnect, remove as rtdbRemove,
+  serverTimestamp as rtdbServerTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDDYYyECxxcvXJm3hNYJFnlRJZDDaArYTs",
@@ -816,11 +1023,18 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
+setPersistence(auth, browserSessionPersistence).catch(() => {});
+const rtdb = getDatabase(app);
 
 // Analytics is best-effort only — never let it block chat functionality
 analyticsSupported().then((ok) => { if (ok) { try { getAnalytics(app); } catch (e) {} } }).catch(() => {});
 
-window.__soulsync = { db, collection, doc, setDoc, getDoc, getDocs, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, deleteDoc, limit };
+window.__soulsync = {
+  db, collection, doc, setDoc, getDoc, getDocs, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, deleteDoc, limit,
+  auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification, authSignOut,
+  rtdb, rtdbRef, onValue, rtdbSet, onDisconnect, rtdbRemove, rtdbServerTimestamp
+};
 window.dispatchEvent(new Event('soulsync-firebase-ready'));
 </script>
 
@@ -839,15 +1053,16 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
   /* ═══════════════ Petals (ambient, cheap) ═══════════════ */
   (function petals() {
     const layer = document.getElementById('petal-layer');
-    const glyphs = ['💗','✦','·','💜'];
-    for (let i = 0; i < 10; i++) {
+    const glyphs = ['·', '✦'];
+    for (let i = 0; i < 4; i++) {
       const p = document.createElement('div');
       p.className = 'petal';
       p.textContent = glyphs[i % glyphs.length];
       p.style.left = Math.random() * 100 + 'vw';
-      p.style.fontSize = (8 + Math.random() * 10) + 'px';
-      p.style.setProperty('--petal-dx', (Math.random() * 60 - 30) + 'px');
-      p.style.animationDuration = (16 + Math.random() * 14) + 's';
+      p.style.fontSize = (7 + Math.random() * 6) + 'px';
+      p.style.opacity = '0.35';
+      p.style.setProperty('--petal-dx', (Math.random() * 40 - 20) + 'px');
+      p.style.animationDuration = (20 + Math.random() * 14) + 's';
       p.style.animationDelay = (-Math.random() * 20) + 's';
       layer.appendChild(p);
     }
@@ -859,6 +1074,13 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
     remove(k) { try { localStorage.removeItem(k); } catch (e) {} },
     keys(prefix) { const out = []; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.indexOf(prefix) === 0) out.push(k); } return out; }
+  };
+
+  // Session lives in sessionStorage on purpose — closing the browser/tab logs you out automatically.
+  const SS = {
+    get(k, fallback) { try { const v = sessionStorage.getItem(k); return v === null ? fallback : JSON.parse(v); } catch (e) { return fallback; } },
+    set(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+    remove(k) { try { sessionStorage.removeItem(k); } catch (e) {} }
   };
 
   function todayKey() {
@@ -875,12 +1097,14 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
     for (let i = 0; i < len; i++) s += chars[Math.floor(Math.random() * chars.length)];
     return s;
   }
-  function simpleHash(str) {
-    // NOT cryptographic — light obfuscation only. Fine for a private, low-stakes login.
-    try { return btoa(unescape(encodeURIComponent(str))); } catch (e) { return str; }
+  async function simpleHash(str) {
+    // Real SHA-256 — accounts now live in shared cloud storage, so a proper hash matters.
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
   const ADMIN_USERNAMES = ['gautam', 'hemane'];
+  const GENDER_ICON = { male: '🙋\u200d♂️', female: '🙋\u200d♀️', other: '🧑' };
 
   /* ═══════════════ Toast ═══════════════ */
   let toastTimer;
@@ -946,98 +1170,194 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
   tcModal.addEventListener('click', (e) => { if (e.target === tcModal) closeTC(); });
 
   /* ═══════════════ Nav between login / signup ═══════════════ */
-  document.getElementById('go-signup').addEventListener('click', () => showScreen('screen-signup'));
+  document.getElementById('go-signup').addEventListener('click', () => showScreen('screen-verify'));
   document.getElementById('go-login').addEventListener('click', () => showScreen('screen-login'));
+  document.getElementById('go-login-from-verify').addEventListener('click', () => showScreen('screen-login'));
 
-  /* ═══════════════ Users / Rooms model (localStorage-backed) ═══════════════ */
-  function getUsers() { return LS.get('ss_users', {}); }
-  function saveUsers(u) { LS.set('ss_users', u); }
-  function getRooms() { return LS.get('ss_rooms', {}); }
-  function saveRooms(r) { LS.set('ss_rooms', r); }
-
-  function buildLink(roomId, role) {
-    return location.origin + location.pathname + '?room=' + roomId + '&role=' + role;
+  /* ═══════════════ Users / Rooms model — Firestore-backed (works across devices) ═══════════════
+     Accounts and room records used to live only in localStorage, which is why a partner
+     opening the app on a different phone could never find the room. They now live in
+     Firestore, the same place messages already sync through. ═══════════════ */
+  function fsReady() {
+    return new Promise((resolve) => withFirebase((fb) => resolve(fb)));
+  }
+  async function getUser(username) {
+    const fb = await fsReady();
+    const snap = await fb.getDoc(fb.doc(fb.db, 'users', username));
+    return snap.exists() ? snap.data() : null;
+  }
+  async function saveUser(username, data) {
+    const fb = await fsReady();
+    await fb.setDoc(fb.doc(fb.db, 'users', username), data);
+  }
+  async function getRoom(roomId) {
+    const fb = await fsReady();
+    const snap = await fb.getDoc(fb.doc(fb.db, 'rooms', roomId));
+    return snap.exists() ? snap.data() : null;
+  }
+  async function saveRoom(roomId, data) {
+    const fb = await fsReady();
+    await fb.setDoc(fb.doc(fb.db, 'rooms', roomId), data, { merge: true });
   }
 
-  /* ═══════════════ Signup ═══════════════ */
-  document.getElementById('btn-signup').addEventListener('click', () => {
+  /* ═══════════════ Step 1: verify a real email (Gmail or email+password) before creating a room ═══════════════ */
+  let pendingVerifiedAuth = null; // { uid, email }
+
+  async function checkAccountAlreadyUsed(uidVal) {
+    const fb = await fsReady();
+    const snap = await fb.getDoc(fb.doc(fb.db, 'verifiedAccounts', uidVal));
+    return snap.exists() ? snap.data() : null;
+  }
+  async function markAccountUsed(uidVal, email, roomId, username) {
+    const fb = await fsReady();
+    await fb.setDoc(fb.doc(fb.db, 'verifiedAccounts', uidVal), { email, roomId, username, createdAt: Date.now() });
+  }
+  async function onVerifiedAuth(uidVal, email) {
+    const existing = await checkAccountAlreadyUsed(uidVal);
+    if (existing) {
+      showAuthError('verify-error', 'This email already has a room — log in with your username instead.');
+      return;
+    }
+    pendingVerifiedAuth = { uid: uidVal, email };
+    document.getElementById('verify-step-pending').classList.add('hidden');
+    document.getElementById('verify-step-choose').classList.remove('hidden');
+    showScreen('screen-signup');
+  }
+
+  document.getElementById('btn-google-signup').addEventListener('click', async () => {
+    clearAuthError('verify-error');
+    try {
+      const fb = await fsReady();
+      const provider = new fb.GoogleAuthProvider();
+      const result = await fb.signInWithPopup(fb.auth, provider);
+      await onVerifiedAuth(result.user.uid, result.user.email);
+    } catch (e) {
+      showAuthError('verify-error', "Couldn't sign in with Google. Try again, or use email instead.");
+    }
+  });
+
+  document.getElementById('btn-email-signup').addEventListener('click', async () => {
+    clearAuthError('verify-error');
+    const email = document.getElementById('verify-email').value.trim();
+    const password = document.getElementById('verify-password').value;
+    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    setErr('f-verify-email', !validEmail);
+    setErr('f-verify-password', password.length < 6);
+    if (!validEmail || password.length < 6) return;
+
+    const btn = document.getElementById('btn-email-signup');
+    btn.disabled = true; btn.textContent = 'Please wait…';
+    try {
+      const fb = await fsReady();
+      let cred;
+      try {
+        cred = await fb.createUserWithEmailAndPassword(fb.auth, email, password);
+      } catch (e1) {
+        if (e1.code === 'auth/email-already-in-use') {
+          cred = await fb.signInWithEmailAndPassword(fb.auth, email, password);
+        } else if (e1.code === 'auth/weak-password') {
+          showAuthError('verify-error', 'Choose a stronger password (at least 6 characters).');
+          return;
+        } else if (e1.code === 'auth/invalid-email') {
+          showAuthError('verify-error', 'That email address looks invalid.');
+          return;
+        } else { throw e1; }
+      }
+      if (cred.user.emailVerified) {
+        await onVerifiedAuth(cred.user.uid, cred.user.email);
+      } else {
+        await fb.sendEmailVerification(cred.user);
+        document.getElementById('verify-pending-email').textContent = cred.user.email;
+        document.getElementById('verify-step-choose').classList.add('hidden');
+        document.getElementById('verify-step-pending').classList.remove('hidden');
+      }
+    } catch (e2) {
+      if (e2.code === 'auth/wrong-password' || e2.code === 'auth/invalid-credential') {
+        showAuthError('verify-error', 'That email is already registered with a different password.');
+      } else {
+        showAuthError('verify-error', "Something went wrong — check your connection and try again.");
+      }
+    } finally {
+      btn.disabled = false; btn.textContent = 'Continue with email';
+    }
+  });
+
+  document.getElementById('btn-verify-recheck').addEventListener('click', async () => {
+    clearAuthError('verify-error');
+    const fb = await fsReady();
+    const user = fb.auth.currentUser;
+    if (!user) { showAuthError('verify-error', 'Session expired — please try again.'); return; }
+    await user.reload();
+    if (user.emailVerified) await onVerifiedAuth(user.uid, user.email);
+    else showAuthError('verify-error', 'Still not verified — check your inbox (and spam folder).');
+  });
+  document.getElementById('btn-verify-resend').addEventListener('click', async () => {
+    const fb = await fsReady();
+    const user = fb.auth.currentUser;
+    if (!user) return;
+    try { await fb.sendEmailVerification(user); toast('Verification email resent 📧'); }
+    catch (e) { toast("Couldn't resend — try again shortly."); }
+  });
+
+  /* ═══════════════ Signup — one shared account per couple (requires a verified email first) ═══════════════ */
+  document.getElementById('btn-signup').addEventListener('click', async () => {
     clearAuthError('signup-error');
+    if (!pendingVerifiedAuth) {
+      showAuthError('signup-error', 'Please verify your email first.');
+      showScreen('screen-verify');
+      return;
+    }
     const name = document.getElementById('su-name').value.trim();
+    const gender = document.getElementById('su-gender').value;
+    const partnerName = document.getElementById('su-partner-name').value.trim();
+    const partnerGender = document.getElementById('su-partner-gender').value;
     const age = parseInt(document.getElementById('su-age').value, 10);
     const username = document.getElementById('su-username').value.trim().toLowerCase();
     const password = document.getElementById('su-password').value;
 
     let ok = true;
     setErr('f-name', !name); if (!name) ok = false;
+    setErr('f-gender', !gender); if (!gender) ok = false;
+    setErr('f-partner-name', !partnerName); if (!partnerName) ok = false;
+    setErr('f-partner-gender', !partnerGender); if (!partnerGender) ok = false;
     setErr('f-age', !(age >= 18)); if (!(age >= 18)) ok = false;
     setErr('f-username', username.length < 3); if (username.length < 3) ok = false;
     setErr('f-password', password.length < 6); if (password.length < 6) ok = false;
-
     if (!ok) return;
 
-    const users = getUsers();
-    if (users[username]) {
-      showAuthError('signup-error', 'That username is already taken — try another.');
-      setErr('f-username', true);
-      return;
-    }
-
-    const isAdmin = ADMIN_USERNAMES.includes(username);
-    let roomId, role;
-
-    if (urlRoom && urlRole === 'partner') {
-      // Joining an existing room via partner link
-      const rooms = getRooms();
-      if (!rooms[urlRoom]) {
-        showAuthError('signup-error', 'This invite link is invalid or the room no longer exists.');
+    const btn = document.getElementById('btn-signup');
+    btn.disabled = true; btn.textContent = 'Creating your room…';
+    try {
+      const existing = await getUser(username);
+      if (existing) {
+        showAuthError('signup-error', 'That username is already taken — try another.');
+        setErr('f-username', true);
         return;
       }
-      roomId = urlRoom;
-      role = 'partner';
-      rooms[roomId].partnerUsername = username;
-      saveRooms(rooms);
-    } else {
-      roomId = uid(9);
-      role = 'owner';
-      const rooms = getRooms();
-      rooms[roomId] = { ownerUsername: username, partnerUsername: null, createdAt: Date.now() };
-      saveRooms(rooms);
+      const isAdmin = ADMIN_USERNAMES.includes(username);
+      const roomId = uid(9);
+      const passwordHash = await simpleHash(password);
+
+      await saveRoom(roomId, {
+        yourName: name, yourGender: gender,
+        partnerName, partnerGender,
+        ownerUsername: username, ownerUid: pendingVerifiedAuth.uid, ownerEmail: pendingVerifiedAuth.email,
+        createdAt: Date.now()
+      });
+      await saveUser(username, { name, age, passwordHash, isAdmin, roomId, createdAt: Date.now() });
+      await markAccountUsed(pendingVerifiedAuth.uid, pendingVerifiedAuth.email, roomId, username);
+      pendingVerifiedAuth = null;
+
+      await enterWhoAmI(username, roomId);
+    } catch (e) {
+      showAuthError('signup-error', "Couldn't create your room — check your connection and try again.");
+    } finally {
+      btn.disabled = false; btn.textContent = 'Create my room';
     }
-
-    users[username] = {
-      name, age, passwordHash: simpleHash(password),
-      isAdmin, roomId, role, createdAt: Date.now()
-    };
-    saveUsers(users);
-
-    if (role === 'owner') {
-      document.getElementById('link-owner').textContent = buildLink(roomId, 'owner');
-      document.getElementById('link-partner').textContent = buildLink(roomId, 'partner');
-      showScreen('screen-links');
-      window.__pendingSession = { username, roomId };
-    } else {
-      // Partner joined directly — log them straight in
-      startSession(username, roomId);
-    }
-  });
-
-  document.querySelectorAll('.copy-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const text = document.getElementById(btn.dataset.copy).textContent;
-      navigator.clipboard?.writeText(text).then(() => {
-        btn.textContent = 'Copied ✓';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1600);
-      }).catch(() => toast('Could not copy — select and copy manually.'));
-    });
-  });
-
-  document.getElementById('btn-enter-app').addEventListener('click', () => {
-    if (window.__pendingSession) startSession(window.__pendingSession.username, window.__pendingSession.roomId);
   });
 
   /* ═══════════════ Login ═══════════════ */
-  document.getElementById('btn-login').addEventListener('click', () => {
+  document.getElementById('btn-login').addEventListener('click', async () => {
     clearAuthError('login-error');
     const username = document.getElementById('login-username').value.trim().toLowerCase();
     const password = document.getElementById('login-password').value;
@@ -1045,48 +1365,98 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
     setErr('f-login-pass', !password);
     if (!username || !password) return;
 
-    const users = getUsers();
-    let record = users[username];
+    const btn = document.getElementById('btn-login');
+    btn.disabled = true; btn.textContent = 'Logging in…';
+    try {
+      let record = await getUser(username);
 
-    // Bootstrap admin accounts on first login (Gautam / Hemane), unrestricted, no separate signup needed
-    if (!record && ADMIN_USERNAMES.includes(username)) {
-      const rooms = getRooms();
-      const adminRoomId = 'hemane-gautam-main';
-      if (!rooms[adminRoomId]) rooms[adminRoomId] = { ownerUsername: 'gautam', partnerUsername: 'hemane', createdAt: Date.now() };
-      saveRooms(rooms);
-      record = { name: username === 'gautam' ? 'Gautam' : 'Hemane', age: 99, passwordHash: simpleHash(password), isAdmin: true, roomId: adminRoomId, role: username === 'gautam' ? 'owner' : 'partner', createdAt: Date.now() };
-      users[username] = record;
-      saveUsers(users);
-      toast('Admin account created for ' + record.name + '.');
-    }
+      // Bootstrap admin accounts on first login (Gautam / Hemane), unrestricted, no separate signup needed
+      if (!record && ADMIN_USERNAMES.includes(username)) {
+        const adminRoomId = 'hemane-gautam-main';
+        const existingRoom = await getRoom(adminRoomId);
+        if (!existingRoom) {
+          await saveRoom(adminRoomId, {
+            yourName: 'Gautam', yourGender: 'male',
+            partnerName: 'Hemane', partnerGender: 'female',
+            ownerUsername: 'gautam', createdAt: Date.now()
+          });
+        }
+        record = {
+          name: username === 'gautam' ? 'Gautam' : 'Hemane', age: 99,
+          passwordHash: await simpleHash(password), isAdmin: true,
+          roomId: adminRoomId, createdAt: Date.now()
+        };
+        await saveUser(username, record);
+        toast('Admin account created for ' + record.name + '.');
+      }
 
-    if (!record) {
-      showAuthError('login-error', "We couldn't find that account. Check your username or sign up.");
-      return;
+      if (!record) {
+        showAuthError('login-error', "We couldn't find that account. Check your username or sign up.");
+        return;
+      }
+      const hash = await simpleHash(password);
+      if (record.passwordHash !== hash) {
+        showAuthError('login-error', 'Incorrect password.');
+        return;
+      }
+      await enterWhoAmI(username, record.roomId);
+    } catch (e) {
+      showAuthError('login-error', "Couldn't reach the server — check your connection and try again.");
+    } finally {
+      btn.disabled = false; btn.textContent = 'Log in';
     }
-    if (record.passwordHash !== simpleHash(password)) {
-      showAuthError('login-error', 'Incorrect password.');
-      return;
-    }
-    startSession(username, record.roomId);
+  });
+
+  /* ═══════════════ Who's chatting? — identity picker, shown after signup/login ═══════════════ */
+  let pendingAuth = null; // { username, roomId, room }
+
+  async function enterWhoAmI(username, roomId) {
+    const room = await getRoom(roomId);
+    pendingAuth = { username, roomId, room };
+    document.getElementById('whoami-you-name').textContent = room?.yourName || 'You';
+    document.getElementById('whoami-partner-name').textContent = room?.partnerName || 'Partner';
+    document.getElementById('whoami-you-emoji').textContent = GENDER_ICON[room?.yourGender] || '👤';
+    document.getElementById('whoami-partner-emoji').textContent = GENDER_ICON[room?.partnerGender] || '👤';
+    showScreen('screen-whoami');
+  }
+  document.getElementById('whoami-btn-you').addEventListener('click', () => {
+    if (pendingAuth) startSession(pendingAuth.username, pendingAuth.roomId, 'you', pendingAuth.room);
+  });
+  document.getElementById('whoami-btn-partner').addEventListener('click', () => {
+    if (pendingAuth) startSession(pendingAuth.username, pendingAuth.roomId, 'partner', pendingAuth.room);
   });
 
   /* ═══════════════ Session / App boot ═══════════════ */
-  let session = null; // { username, roomId, isAdmin, name }
+  let session = null; // { username, roomId, activeRole, isAdmin, room }
   let unsubMsgs = null;
+  let unsubPresence = null;
+  let unsubTyping = null;
+  let unsubBroadcast = null;
+  let presenceRefs = null;
+  let typingTimeout = null;
 
-  function startSession(username, roomId) {
-    const users = getUsers();
-    const u = users[username];
-    session = { username, roomId, isAdmin: !!u?.isAdmin, name: u?.name || username };
-    LS.set('ss_session', session);
+  function startSession(username, roomId, activeRole, room) {
+    session = { username, roomId, activeRole, isAdmin: ADMIN_USERNAMES.includes(username), room: room || null };
+    SS.set('ss_session', session);
     enterApp();
   }
 
-  function logout() {
+  function teardownLiveConnections() {
     if (unsubMsgs) { try { unsubMsgs(); } catch (e) {} unsubMsgs = null; }
-    LS.remove('ss_session');
+    if (unsubPresence) { try { unsubPresence(); } catch (e) {} unsubPresence = null; }
+    if (unsubTyping) { try { unsubTyping(); } catch (e) {} unsubTyping = null; }
+    if (unsubBroadcast) { try { unsubBroadcast(); } catch (e) {} unsubBroadcast = null; }
+    if (presenceRefs) {
+      withFirebase((fb) => { try { fb.rtdbSet(presenceRefs.mine, { online: false, lastActive: Date.now() }); } catch (e) {} });
+      presenceRefs = null;
+    }
+  }
+
+  function logout() {
+    teardownLiveConnections();
+    SS.remove('ss_session');
     session = null;
+    withFirebase((fb) => { try { fb.authSignOut(fb.auth); } catch (e) {} });
     document.getElementById('app-screen').classList.add('hidden');
     document.getElementById('login-username').value = '';
     document.getElementById('login-password').value = '';
@@ -1094,70 +1464,50 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
   }
   document.getElementById('btn-logout').addEventListener('click', () => { closeDrawer(); logout(); });
 
+  // Auto logout when the tab/browser actually closes (sessionStorage already handles the "log back in
+  // next visit" part — this also marks presence offline promptly instead of waiting on a timeout).
+  window.addEventListener('pagehide', () => { if (session) teardownLiveConnections(); });
+
+  function switchIdentity() {
+    if (!session) return;
+    closeDrawer();
+    teardownLiveConnections();
+    enterWhoAmI(session.username, session.roomId);
+  }
+
   function enterApp() {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
     document.getElementById('app-screen').classList.remove('hidden');
 
-    document.getElementById('drawer-username').firstChild.textContent = session.name + ' ';
-    document.getElementById('admin-badge').classList.toggle('hidden', !session.isAdmin);
-    document.getElementById('settings-account-info').textContent = 'Signed in as ' + session.name + (session.isAdmin ? ' · Admin account, no limits.' : '.');
+    const room = session.room || {};
+    const myName = session.activeRole === 'you' ? room.yourName : room.partnerName;
+    const otherName = session.activeRole === 'you' ? room.partnerName : room.yourName;
 
-    const rooms = getRooms();
-    const room = rooms[session.roomId];
-    const users = getUsers();
-    let otherName = 'your partner';
-    if (room) {
-      const otherUsername = room.ownerUsername === session.username ? room.partnerUsername : room.ownerUsername;
-      if (otherUsername && users[otherUsername]) otherName = users[otherUsername].name;
-    }
-    document.getElementById('topbar-room-name').textContent = otherName + ' & you';
-    document.getElementById('presence-text').textContent = otherName + "'s space";
+    document.getElementById('drawer-username').firstChild.textContent = (myName || session.username) + ' ';
+    document.getElementById('admin-badge').classList.toggle('hidden', !session.isAdmin);
+    document.getElementById('drawer-admin').classList.toggle('hidden', !session.isAdmin);
+    document.getElementById('settings-account-info').textContent = 'Signed in as ' + (myName || session.username) + (session.isAdmin ? ' · Admin account, no limits.' : '.');
+
+    document.getElementById('topbar-room-name').textContent = (otherName || 'your partner') + ' & you';
+    document.getElementById('presence-text').textContent = (otherName || 'Your partner') + "'s space";
 
     if (session.isAdmin) document.getElementById('msg-input').removeAttribute('maxlength');
 
-    cleanupOldDays();
     loadThread();
     updateStreakDisplay();
     loadTodayMood();
+    loadExamCountdown();
+    setupPresence();
+    setupTypingIndicator();
+    setupBroadcastListener();
+    if (session.isAdmin) loadTicketsForAdmin();
   }
 
-  /* Restore session on load */
+  /* Restore session on load (sessionStorage — cleared automatically when the browser/tab closed) */
   (function restoreSession() {
-    const saved = LS.get('ss_session', null);
+    const saved = SS.get('ss_session', null);
     if (saved) { session = saved; enterApp(); }
   })();
-
-  /* ═══════════════ Auto-delete at midnight (client-side, date-bucketed) ═══════════════ */
-  function cleanupOldDays() {
-    if (!session) return;
-    const prefix = 'ss_msgs_' + session.roomId + '_';
-    const keep = prefix + todayKey();
-    LS.keys(prefix).forEach(k => { if (k !== keep) LS.remove(k); });
-
-    // Best-effort remote cleanup too, once Firebase is really configured.
-    withFirebase(async (fb) => {
-      try {
-        const daysCol = fb.collection(fb.db, 'rooms', session.roomId, 'days');
-        const snap = await fb.getDocs(daysCol);
-        const today = todayKey();
-        for (const d of snap.docs) {
-          if (d.id !== today) {
-            const msgsSnap = await fb.getDocs(fb.collection(fb.db, 'rooms', session.roomId, 'days', d.id, 'messages'));
-            for (const m of msgsSnap.docs) await fb.deleteDoc(m.ref);
-            await fb.deleteDoc(d.ref);
-          }
-        }
-      } catch (e) { /* silent — remote cleanup is best-effort */ }
-    });
-  }
-
-  // Also schedule a check for the moment midnight actually ticks over while the tab is open
-  function scheduleMidnightSweep() {
-    const now = new Date();
-    const next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 5);
-    setTimeout(() => { cleanupOldDays(); renderThreadFromStorage(); scheduleMidnightSweep(); }, next - now);
-  }
-  scheduleMidnightSweep();
 
   /* ═══════════════ Firebase bridge ═══════════════ */
   function withFirebase(fn) {
@@ -1165,40 +1515,198 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
     else window.addEventListener('soulsync-firebase-ready', () => fn(window.__soulsync), { once: true });
   }
 
-  /* ═══════════════ Thread rendering ═══════════════ */
+  /* ═══════════════ Presence — online/offline + last seen (Realtime Database, with onDisconnect) ═══════════════ */
+  function setupPresence() {
+    withFirebase((fb) => {
+      const mineRef = fb.rtdbRef(fb.rtdb, 'presence/' + session.roomId + '/' + session.activeRole);
+      const otherRole = session.activeRole === 'you' ? 'partner' : 'you';
+      const otherRef = fb.rtdbRef(fb.rtdb, 'presence/' + session.roomId + '/' + otherRole);
+      presenceRefs = { mine: mineRef };
+
+      const connectedRef = fb.rtdbRef(fb.rtdb, '.info/connected');
+      fb.onValue(connectedRef, (snap) => {
+        if (snap.val() === true) {
+          fb.onDisconnect(mineRef).set({ online: false, lastActive: fb.rtdbServerTimestamp() });
+          fb.rtdbSet(mineRef, { online: true, lastActive: fb.rtdbServerTimestamp() });
+        }
+      });
+
+      unsubPresence = fb.onValue(otherRef, (snap) => {
+        const val = snap.val();
+        const dot = document.getElementById('presence-dot');
+        const text = document.getElementById('presence-text');
+        const otherName = (session.activeRole === 'you' ? session.room?.partnerName : session.room?.yourName) || 'Your partner';
+        if (val?.online) {
+          dot.classList.remove('offline');
+          text.textContent = otherName + ' is online';
+        } else {
+          dot.classList.add('offline');
+          const last = val?.lastActive;
+          text.textContent = last ? (otherName + ' · last seen ' + formatLastSeen(last)) : (otherName + "'s space");
+        }
+      });
+    });
+  }
+  function formatLastSeen(ts) {
+    const d = new Date(typeof ts === 'number' ? ts : Date.now());
+    const diffMin = Math.round((Date.now() - d.getTime()) / 60000);
+    if (diffMin < 1) return 'just now';
+    if (diffMin < 60) return diffMin + 'm ago';
+    if (d.toDateString() === new Date().toDateString()) return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  /* ═══════════════ Typing indicator ═══════════════ */
+  function setupTypingIndicator() {
+    withFirebase((fb) => {
+      const otherRole = session.activeRole === 'you' ? 'partner' : 'you';
+      const otherTypingRef = fb.rtdbRef(fb.rtdb, 'typing/' + session.roomId + '/' + otherRole);
+      unsubTyping = fb.onValue(otherTypingRef, (snap) => {
+        const isTyping = !!snap.val();
+        const text = document.getElementById('presence-text');
+        if (isTyping) { text.textContent = ((session.activeRole === 'you' ? session.room?.partnerName : session.room?.yourName) || 'Your partner') + ' is typing…'; text.classList.add('typing-text'); }
+        else { text.classList.remove('typing-text'); }
+      });
+    });
+  }
+  function notifyTyping() {
+    withFirebase((fb) => {
+      const mineTypingRef = fb.rtdbRef(fb.rtdb, 'typing/' + session.roomId + '/' + session.activeRole);
+      fb.rtdbSet(mineTypingRef, true);
+      clearTimeout(typingTimeout);
+      typingTimeout = setTimeout(() => fb.rtdbSet(mineTypingRef, false), 2500);
+    });
+  }
+
+  /* ═══════════════ Broadcasts — admin announcements shown to everyone ═══════════════ */
+  function setupBroadcastListener() {
+    withFirebase((fb) => {
+      const col = fb.collection(fb.db, 'broadcasts');
+      const q = fb.query(col, fb.orderBy('createdAt', 'desc'), fb.limit(1));
+      unsubBroadcast = fb.onSnapshot(q, (snap) => {
+        if (snap.empty) return;
+        const docSnap = snap.docs[0];
+        const b = docSnap.data();
+        const seen = LS.get('ss_broadcast_seen', []);
+        const slot = document.getElementById('broadcast-slot');
+        if (seen.includes(docSnap.id)) { slot.innerHTML = ''; return; }
+        slot.innerHTML = '';
+        const banner = document.createElement('div');
+        banner.className = 'broadcast-banner';
+        banner.innerHTML = '<span class="bb-icon">📣</span><span></span><button aria-label="Dismiss">×</button>';
+        banner.querySelector('span:nth-child(2)').textContent = b.message || '';
+        banner.querySelector('button').addEventListener('click', () => {
+          const s = LS.get('ss_broadcast_seen', []);
+          s.push(docSnap.id);
+          LS.set('ss_broadcast_seen', s);
+          slot.innerHTML = '';
+        });
+        slot.appendChild(banner);
+      }, () => {});
+    });
+  }
+
+  /* Keep the room's message count bounded (free Firestore plan) — best-effort, runs after each send */
+  function trimOldMessages(fb) {
+    (async () => {
+      try {
+        const col = fb.collection(fb.db, 'rooms', session.roomId, 'messages');
+        const q = fb.query(col, fb.orderBy('ts', 'asc'), fb.limit(450));
+        const snap = await fb.getDocs(q);
+        if (snap.docs.length > 400) {
+          const excess = snap.docs.slice(0, snap.docs.length - 400);
+          for (const d of excess) await fb.deleteDoc(d.ref);
+        }
+      } catch (e) { /* best-effort only */ }
+    })();
+  }
+
+  /* ═══════════════ Thread rendering — one continuous, merged conversation ═══════════════ */
   const threadEl = document.getElementById('thread');
 
-  function msgsKey() { return 'ss_msgs_' + session.roomId + '_' + todayKey(); }
+  function msgsKey() { return 'ss_msgs_' + session.roomId; }
   function getLocalMsgs() { return LS.get(msgsKey(), []); }
   function saveLocalMsgs(list) { LS.set(msgsKey(), list); }
+
+  function dayLabelFor(ts) {
+    const d = new Date(ts || Date.now());
+    const today = new Date();
+    if (d.toDateString() === today.toDateString()) return 'Today';
+    const yest = new Date(today); yest.setDate(yest.getDate() - 1);
+    if (d.toDateString() === yest.toDateString()) return 'Yesterday';
+    return d.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+  }
 
   function renderThreadFromStorage() {
     const list = getLocalMsgs();
     threadEl.innerHTML = '';
     if (!list.length) {
-      threadEl.innerHTML = '<div class="empty-thread"><div class="em-icon">💌</div><p>Nothing here yet today. Say hello — your space clears fresh again at midnight.</p></div>';
+      threadEl.innerHTML = '<div class="empty-thread"><div class="em-icon">💌</div><p>Nothing here yet. Say hello — this space is just between you two.</p></div>';
       return;
     }
-    const chip = document.createElement('div');
-    chip.className = 'date-chip';
-    chip.textContent = todayLabel();
-    threadEl.appendChild(chip);
-    list.forEach(m => appendBubble(m, false));
+    let lastDay = null;
+    list.forEach(m => {
+      const day = dayLabelFor(m.ts);
+      if (day !== lastDay) {
+        const chip = document.createElement('div');
+        chip.className = 'date-chip';
+        chip.textContent = day;
+        threadEl.appendChild(chip);
+        lastDay = day;
+      }
+      appendBubble(m, false);
+    });
     threadEl.scrollTop = threadEl.scrollHeight;
   }
 
+  function ticksHtml(m) {
+    if (m.senderRole !== session.activeRole) return '';
+    const state = m.readAt ? 'read' : (m.deliveredAt ? 'delivered' : 'sent');
+    const double = state !== 'sent';
+    const color = state === 'read' ? '#6fd0ff' : '#8a8398';
+    return '<span class="msg-ticks' + (state === 'read' ? ' read' : '') + '"><svg width="' + (double ? '16' : '10') + '" height="10" viewBox="0 0 16 10" fill="none">' +
+      '<path d="M1 5L4 8L9 2" stroke="' + color + '" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>' +
+      (double ? '<path d="M6 5L9 8L14 2" stroke="' + color + '" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>' : '') +
+      '</svg></span>';
+  }
+
   function appendBubble(m, scroll) {
-    if (threadEl.querySelector('.empty-thread')) threadEl.innerHTML = '<div class="date-chip">' + todayLabel() + '</div>';
+    if (threadEl.querySelector('.empty-thread')) threadEl.innerHTML = '';
     const row = document.createElement('div');
-    row.className = 'msg-row ' + (m.sender === session.username ? 'you' : 'them');
+    row.className = 'msg-row ' + (m.senderRole === session.activeRole ? 'you' : 'them');
     const time = new Date(m.ts || Date.now()).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+    const ticks = ticksHtml(m);
     const bubble = document.createElement('div');
-    bubble.className = 'bubble';
-    bubble.innerHTML = '<div class="txt"></div><div class="meta"><span>' + time + '</span></div>';
-    bubble.querySelector('.txt').textContent = m.text;
+
+    if (m.type === 'image') {
+      bubble.className = 'bubble image-bubble';
+      bubble.innerHTML = '<img alt="Shared photo"><div class="img-meta">' + time + ticks + '</div>';
+      bubble.querySelector('img').src = m.imageData;
+    } else if (m.type === 'voice') {
+      bubble.className = 'bubble voice-bubble';
+      const mins = Math.floor((m.duration || 0) / 60), secs = (m.duration || 0) % 60;
+      bubble.innerHTML = '<audio controls></audio><div class="meta"><span>' + mins + ':' + String(secs).padStart(2, '0') + ' · ' + time + '</span>' + ticks + '</div>';
+      bubble.querySelector('audio').src = m.audioData;
+    } else {
+      bubble.className = 'bubble';
+      bubble.innerHTML = '<div class="txt"></div><div class="meta"><span>' + time + '</span>' + ticks + '</div>';
+      bubble.querySelector('.txt').textContent = m.text;
+    }
     row.appendChild(bubble);
     threadEl.appendChild(row);
     if (scroll !== false) threadEl.scrollTop = threadEl.scrollHeight;
+  }
+
+  function markIncomingReceipts(fb, docs) {
+    const isVisible = document.visibilityState === 'visible';
+    docs.forEach((d) => {
+      const data = d.data();
+      if (data.senderRole === session.activeRole) return; // my own message, nothing to mark
+      const updates = {};
+      if (!data.deliveredAt) updates.deliveredAt = Date.now();
+      if (isVisible && !data.readAt) updates.readAt = Date.now();
+      if (Object.keys(updates).length) fb.setDoc(d.ref, updates, { merge: true }).catch(() => {});
+    });
   }
 
   function loadThread() {
@@ -1206,13 +1714,30 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
     if (unsubMsgs) { try { unsubMsgs(); } catch (e) {} unsubMsgs = null; }
     withFirebase((fb) => {
       try {
-        const col = fb.collection(fb.db, 'rooms', session.roomId, 'days', todayKey(), 'messages');
+        const col = fb.collection(fb.db, 'rooms', session.roomId, 'messages');
         const q = fb.query(col, fb.orderBy('ts', 'asc'), fb.limit(500));
         unsubMsgs = fb.onSnapshot(q, (snap) => {
           const list = snap.docs.map(d => d.data());
           if (list.length) { saveLocalMsgs(list); renderThreadFromStorage(); }
+          markIncomingReceipts(fb, snap.docs);
         }, () => { /* silent — falls back to local-only mode */ });
       } catch (e) { /* Firebase not configured yet — local-only mode */ }
+    });
+  }
+
+  /* Shared send path for text / image / voice messages */
+  function queueMessage(m) {
+    const list = getLocalMsgs();
+    list.push(m);
+    saveLocalMsgs(list);
+    appendBubble(m, true);
+    markActiveToday();
+    withFirebase(async (fb) => {
+      try {
+        const col = fb.collection(fb.db, 'rooms', session.roomId, 'messages');
+        await fb.addDoc(col, m);
+        trimOldMessages(fb);
+      } catch (e) { toast("Couldn't sync — saved on this device, will retry when online."); }
     });
   }
 
@@ -1220,21 +1745,9 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
     const input = document.getElementById('msg-input');
     const text = input.value.trim();
     if (!text) return;
-    const m = { sender: session.username, text, ts: Date.now() };
-    const list = getLocalMsgs();
-    list.push(m);
-    saveLocalMsgs(list);
-    appendBubble(m, true);
+    queueMessage({ type: 'text', senderRole: session.activeRole, text, ts: Date.now() });
     input.value = '';
     input.style.height = 'auto';
-    markActiveToday();
-
-    withFirebase(async (fb) => {
-      try {
-        const col = fb.collection(fb.db, 'rooms', session.roomId, 'days', todayKey(), 'messages');
-        await fb.addDoc(col, { sender: session.username, text, ts: Date.now() });
-      } catch (e) { /* local-only fallback, silent */ }
-    });
   }
   document.getElementById('btn-send').addEventListener('click', sendMessage);
   const msgInput = document.getElementById('msg-input');
@@ -1244,33 +1757,126 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
   msgInput.addEventListener('input', () => {
     msgInput.style.height = 'auto';
     msgInput.style.height = Math.min(msgInput.scrollHeight, 90) + 'px';
+    if (msgInput.value.trim()) notifyTyping();
   });
 
-  document.getElementById('btn-attach').addEventListener('click', () => toast('Photo sharing is coming soon 🖼️'));
   document.getElementById('btn-photos-top').addEventListener('click', () => openPanel('panel-photos'));
 
-  /* ═══════════════ Streak (activity log persists across midnight clears) ═══════════════ */
+  /* ═══════════════ Image sharing — up to 3 per day, per side ═══════════════ */
+  function todayImageCountKey() { return 'ss_imgcount_' + session.roomId + '_' + session.activeRole + '_' + todayKey(); }
+  function getTodayImageCount() { return LS.get(todayImageCountKey(), 0); }
+  function bumpTodayImageCount() { LS.set(todayImageCountKey(), getTodayImageCount() + 1); }
+
+  function compressImageFile(file, maxDim, quality) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > height && width > maxDim) { height = Math.round(height * (maxDim / width)); width = maxDim; }
+          else if (height > maxDim) { width = Math.round(width * (maxDim / height)); height = maxDim; }
+          const canvas = document.createElement('canvas');
+          canvas.width = width; canvas.height = height;
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.getElementById('btn-attach').addEventListener('click', () => {
+    if (!session.isAdmin && getTodayImageCount() >= 3) { toast("You've shared 3 photos today — more tomorrow 📸"); return; }
+    document.getElementById('file-image').click();
+  });
+  document.getElementById('file-image').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    if (!session.isAdmin && getTodayImageCount() >= 3) { toast("You've shared 3 photos today — more tomorrow 📸"); return; }
+    try {
+      const dataUrl = await compressImageFile(file, 1280, 0.62);
+      queueMessage({ type: 'image', senderRole: session.activeRole, imageData: dataUrl, ts: Date.now() });
+      bumpTodayImageCount();
+    } catch (e) { toast("Couldn't send that photo — try a different one."); }
+  });
+
+  /* ═══════════════ Voice notes — up to 2 minutes ═══════════════ */
+  let mediaRecorder = null, recChunks = [], recTimer = null, recSeconds = 0, recStream = null, recWantsSend = false;
+
+  function updateRecTimer() {
+    const m = Math.floor(recSeconds / 60), s = recSeconds % 60;
+    document.getElementById('rec-timer').textContent = m + ':' + String(s).padStart(2, '0');
+  }
+  function startRecording() {
+    if (!navigator.mediaDevices?.getUserMedia) { toast("Your browser can't record audio."); return; }
+    navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+      recStream = stream;
+      recChunks = [];
+      let opts = { audioBitsPerSecond: 32000 };
+      if (window.MediaRecorder && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
+        opts.mimeType = 'audio/webm;codecs=opus';
+      }
+      mediaRecorder = new MediaRecorder(stream, opts);
+      mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recChunks.push(e.data); };
+      mediaRecorder.onstop = onRecordingStop;
+      mediaRecorder.start();
+      recSeconds = 0;
+      updateRecTimer();
+      document.getElementById('recording-bar').classList.remove('hidden');
+      document.getElementById('btn-send').classList.add('recording');
+      recTimer = setInterval(() => {
+        recSeconds++;
+        updateRecTimer();
+        if (recSeconds >= 120) stopRecording(true);
+      }, 1000);
+    }).catch(() => toast("Couldn't access your microphone."));
+  }
+  function stopRecording(send) {
+    recWantsSend = send;
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+    if (recStream) { recStream.getTracks().forEach(t => t.stop()); recStream = null; }
+    clearInterval(recTimer);
+    document.getElementById('recording-bar').classList.add('hidden');
+    document.getElementById('btn-send').classList.remove('recording');
+  }
+  function onRecordingStop() {
+    if (!recWantsSend || !recChunks.length) return;
+    const blob = new Blob(recChunks, { type: 'audio/webm' });
+    const reader = new FileReader();
+    const seconds = recSeconds;
+    reader.onload = () => {
+      queueMessage({ type: 'voice', senderRole: session.activeRole, audioData: reader.result, duration: seconds, ts: Date.now() });
+    };
+    reader.readAsDataURL(blob);
+  }
+  document.getElementById('btn-mic').addEventListener('click', startRecording);
+  document.getElementById('btn-rec-cancel').addEventListener('click', () => stopRecording(false));
+  document.getElementById('btn-rec-stop').addEventListener('click', () => stopRecording(true));
+
+  /* ═══════════════ Streak (per-role activity, survives forever now — no midnight wipe) ═══════════════ */
   function activityKey() { return 'ss_activity_' + session.roomId; }
   function markActiveToday() {
     const act = LS.get(activityKey(), {});
     const t = todayKey();
     act[t] = act[t] || [];
-    if (!act[t].includes(session.username)) act[t].push(session.username);
+    if (!act[t].includes(session.activeRole)) act[t].push(session.activeRole);
     LS.set(activityKey(), act);
     updateStreakDisplay();
   }
   function computeStreak() {
     const act = LS.get(activityKey(), {});
-    const rooms = getRooms();
-    const room = rooms[session.roomId];
-    const pair = room ? [room.ownerUsername, room.partnerUsername].filter(Boolean) : [session.username];
+    const pair = ['you', 'partner'];
     let count = 0;
     let d = new Date();
-    // count today only if both already active; always check backwards from today
     for (;;) {
       const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
       const activeSet = act[key] || [];
-      const bothActive = pair.length < 2 ? activeSet.length > 0 : pair.every(u => activeSet.includes(u));
+      const bothActive = pair.every(r => activeSet.includes(r));
       if (!bothActive) { if (key === todayKey()) { d.setDate(d.getDate() - 1); continue; } break; }
       count++;
       d.setDate(d.getDate() - 1);
@@ -1283,7 +1889,7 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
   }
 
   /* ═══════════════ Mood ═══════════════ */
-  function moodKey() { return 'ss_mood_' + session.roomId + '_' + todayKey() + '_' + session.username; }
+  function moodKey() { return 'ss_mood_' + session.roomId + '_' + todayKey() + '_' + session.activeRole; }
   function loadTodayMood() {
     const saved = LS.get(moodKey(), null);
     document.querySelectorAll('.mood-opt').forEach(el => el.classList.toggle('selected', el.dataset.mood === saved));
@@ -1296,6 +1902,36 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
       markActiveToday();
       toast('Mood updated 💗');
     });
+  });
+
+  /* ═══════════════ Exam countdown (replaces the old fixed IMU-CET counter) ═══════════════ */
+  async function loadExamCountdown() {
+    const room = await getRoom(session.roomId);
+    session.room = room;
+    SS.set('ss_session', session);
+    const nameInput = document.getElementById('exam-name-input');
+    const dateInput = document.getElementById('exam-date-input');
+    const display = document.getElementById('exam-display');
+    if (room?.examName && room?.examDate) {
+      nameInput.value = room.examName;
+      dateInput.value = room.examDate;
+      const days = Math.ceil((new Date(room.examDate + 'T00:00:00') - new Date(new Date().toDateString())) / 86400000);
+      document.getElementById('exam-days-left').textContent = days >= 0 ? days : 0;
+      document.getElementById('exam-label').textContent =
+        days > 0 ? ('days left until ' + room.examName) :
+        days === 0 ? (room.examName + ' is today!') : (room.examName + ' has passed');
+      display.classList.remove('hidden');
+    } else {
+      display.classList.add('hidden');
+    }
+  }
+  document.getElementById('btn-exam-save').addEventListener('click', async () => {
+    const name = document.getElementById('exam-name-input').value.trim();
+    const date = document.getElementById('exam-date-input').value;
+    if (!name || !date) { toast('Add an exam name and date first.'); return; }
+    await saveRoom(session.roomId, { examName: name, examDate: date });
+    toast('Countdown saved 🧭');
+    loadExamCountdown();
   });
 
   /* ═══════════════ Settings toggles ═══════════════ */
@@ -1320,22 +1956,62 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
   document.querySelectorAll('[data-close-panel]').forEach(btn => {
     btn.addEventListener('click', () => btn.closest('.panel').classList.remove('open'));
   });
+  const switchBtn = document.getElementById('drawer-switch-person');
+  if (switchBtn) switchBtn.addEventListener('click', switchIdentity);
 
-  /* ═══════════════ Deep-link handling on first load ═══════════════ */
-  (function handleDeepLink() {
-    if (!urlRoom) return;
-    const rooms = getRooms();
-    if (!rooms[urlRoom]) return; // invalid/expired room id in URL, ignore
-    // If not already logged in, nudge them to the right screen.
-    if (!session) {
-      if (urlRole === 'partner') {
-        showScreen('screen-signup');
-        document.querySelector('#screen-signup .sub').textContent = "You've been invited into a private room. Create your account to join.";
-      } else {
-        showScreen('screen-login');
-      }
-    }
-  })();
+  /* ═══════════════ Help & Support ═══════════════ */
+  document.getElementById('btn-help-send').addEventListener('click', () => {
+    const msg = document.getElementById('help-message').value.trim();
+    if (!msg) { toast('Write a quick description first.'); return; }
+    withFirebase(async (fb) => {
+      try {
+        const room = session.room || {};
+        const myName = session.activeRole === 'you' ? room.yourName : room.partnerName;
+        await fb.addDoc(fb.collection(fb.db, 'supportTickets'), {
+          roomId: session.roomId, username: session.username, activeRole: session.activeRole,
+          name: myName || session.username, message: msg, createdAt: Date.now(), status: 'open'
+        });
+        document.getElementById('help-message').value = '';
+        document.getElementById('help-sent-note').classList.remove('hidden');
+      } catch (e) { toast("Couldn't send — check your connection and try again."); }
+    });
+  });
+
+  /* ═══════════════ Admin dashboard ═══════════════ */
+  function loadTicketsForAdmin() {
+    withFirebase((fb) => {
+      try {
+        const col = fb.collection(fb.db, 'supportTickets');
+        const q = fb.query(col, fb.orderBy('createdAt', 'desc'), fb.limit(50));
+        fb.onSnapshot(q, (snap) => {
+          const list = document.getElementById('ticket-list');
+          if (snap.empty) { list.innerHTML = '<p style="color:var(--muted);font-size:12.5px;">No tickets yet.</p>'; return; }
+          list.innerHTML = '';
+          snap.docs.forEach((d) => {
+            const t = d.data();
+            const div = document.createElement('div');
+            div.className = 'ticket-item';
+            const when = new Date(t.createdAt || Date.now()).toLocaleString();
+            div.innerHTML = '<div class="t-meta"></div><div class="t-body"></div>';
+            div.querySelector('.t-meta').textContent = (t.name || t.username || 'Someone') + ' · ' + when;
+            div.querySelector('.t-body').textContent = t.message || '';
+            list.appendChild(div);
+          });
+        }, () => {});
+      } catch (e) { /* not admin or not configured */ }
+    });
+  }
+  document.getElementById('btn-broadcast-send').addEventListener('click', () => {
+    const msg = document.getElementById('broadcast-message').value.trim();
+    if (!msg) { toast('Write the announcement first.'); return; }
+    withFirebase(async (fb) => {
+      try {
+        await fb.addDoc(fb.collection(fb.db, 'broadcasts'), { message: msg, createdAt: Date.now(), sentBy: session.username });
+        document.getElementById('broadcast-message').value = '';
+        toast('Broadcast sent to everyone 📣');
+      } catch (e) { toast("Couldn't send — check your connection and try again."); }
+    });
+  });
 
 })();
 
