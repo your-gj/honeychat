@@ -1002,7 +1002,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
   getAuth, setPersistence, browserSessionPersistence,
-  createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  createUserWithEmailAndPassword, signInWithEmailAndPassword, updatePassword,
   GoogleAuthProvider, signInWithPopup, sendEmailVerification, signOut as authSignOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
@@ -1032,7 +1032,7 @@ analyticsSupported().then((ok) => { if (ok) { try { getAnalytics(app); } catch (
 
 window.__soulsync = {
   db, collection, doc, setDoc, getDoc, getDocs, addDoc, query, where, orderBy, onSnapshot, serverTimestamp, deleteDoc, limit,
-  auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification, authSignOut,
+  auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updatePassword, GoogleAuthProvider, signInWithPopup, sendEmailVerification, authSignOut,
   rtdb, rtdbRef, onValue, rtdbSet, onDisconnect, rtdbRemove, rtdbServerTimestamp
 };
 window.dispatchEvent(new Event('soulsync-firebase-ready'));
@@ -1190,6 +1190,15 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
     const fb = await fsReady();
     await fb.setDoc(fb.doc(fb.db, 'users', username), data);
   }
+  async function getUsernameIndex(username) {
+    const fb = await fsReady();
+    const snap = await fb.getDoc(fb.doc(fb.db, 'usernameIndex', username));
+    return snap.exists() ? snap.data() : null;
+  }
+  async function saveUsernameIndex(username, email) {
+    const fb = await fsReady();
+    await fb.setDoc(fb.doc(fb.db, 'usernameIndex', username), { email });
+  }
   async function getRoom(roomId) {
     const fb = await fsReady();
     const snap = await fb.getDoc(fb.doc(fb.db, 'rooms', roomId));
@@ -1328,15 +1337,19 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
     const btn = document.getElementById('btn-signup');
     btn.disabled = true; btn.textContent = 'Creating your room…';
     try {
-      const existing = await getUser(username);
-      if (existing) {
+      const existingIdx = await getUsernameIndex(username);
+      if (existingIdx) {
         showAuthError('signup-error', 'That username is already taken — try another.');
         setErr('f-username', true);
         return;
       }
       const isAdmin = ADMIN_USERNAMES.includes(username);
       const roomId = uid(9);
-      const passwordHash = await simpleHash(password);
+      const fb = await fsReady();
+
+      // The username+password chosen here becomes the real Firebase Auth password
+      // (the verification-step password was only ever needed to prove the email once).
+      await fb.updatePassword(fb.auth.currentUser, password);
 
       await saveRoom(roomId, {
         yourName: name, yourGender: gender,
@@ -1344,7 +1357,8 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
         ownerUsername: username, ownerUid: pendingVerifiedAuth.uid, ownerEmail: pendingVerifiedAuth.email,
         createdAt: Date.now()
       });
-      await saveUser(username, { name, age, passwordHash, isAdmin, roomId, createdAt: Date.now() });
+      await saveUser(username, { name, age, isAdmin, roomId, uid: pendingVerifiedAuth.uid, createdAt: Date.now() });
+      await saveUsernameIndex(username, pendingVerifiedAuth.email);
       await markAccountUsed(pendingVerifiedAuth.uid, pendingVerifiedAuth.email, roomId, username);
       pendingVerifiedAuth = null;
 
@@ -1368,37 +1382,73 @@ window.onTurnstileOK = function () { window.__turnstileOK = true; updateSignupBt
     const btn = document.getElementById('btn-login');
     btn.disabled = true; btn.textContent = 'Logging in…';
     try {
-      let record = await getUser(username);
+      const fb = await fsReady();
+      const idx = await getUsernameIndex(username);
 
-      // Bootstrap admin accounts on first login (Gautam / Hemane), unrestricted, no separate signup needed
-      if (!record && ADMIN_USERNAMES.includes(username)) {
+      // Bootstrap admin accounts on first-ever login (Gautam / Hemane) — creates a real Firebase Auth account
+      if (!idx && ADMIN_USERNAMES.includes(username)) {
+        const adminEmail = username + '@honeygonnachat.internal';
+        let cred;
+        try {
+          cred = await fb.createUserWithEmailAndPassword(fb.auth, adminEmail, password);
+        } catch (e) {
+          if (e.code === 'auth/email-already-in-use') {
+            try {
+              cred = await fb.signInWithEmailAndPassword(fb.auth, adminEmail, password);
+            } catch (e2) {
+              showAuthError('login-error', 'Incorrect password.');
+              return;
+            }
+          } else {
+            showAuthError('login-error', "Couldn't create the admin account — try again.");
+            return;
+          }
+        }
         const adminRoomId = 'hemane-gautam-main';
         const existingRoom = await getRoom(adminRoomId);
         if (!existingRoom) {
           await saveRoom(adminRoomId, {
             yourName: 'Gautam', yourGender: 'male',
             partnerName: 'Hemane', partnerGender: 'female',
-            ownerUsername: 'gautam', createdAt: Date.now()
+            ownerUsername: 'gautam', ownerUid: cred.user.uid, createdAt: Date.now()
           });
         }
-        record = {
+        await saveUser(username, {
           name: username === 'gautam' ? 'Gautam' : 'Hemane', age: 99,
-          passwordHash: await simpleHash(password), isAdmin: true,
-          roomId: adminRoomId, createdAt: Date.now()
-        };
-        await saveUser(username, record);
-        toast('Admin account created for ' + record.name + '.');
+          isAdmin: true, uid: cred.user.uid, roomId: adminRoomId, createdAt: Date.now()
+        });
+        await saveUsernameIndex(username, adminEmail);
+        toast('Admin account created for ' + (username === 'gautam' ? 'Gautam' : 'Hemane') + '.');
+        await enterWhoAmI(username, adminRoomId);
+        return;
       }
 
-      if (!record) {
+      if (!idx) {
         showAuthError('login-error', "We couldn't find that account. Check your username or sign up.");
         return;
       }
-      const hash = await simpleHash(password);
-      if (record.passwordHash !== hash) {
+
+      try {
+        await fb.signInWithEmailAndPassword(fb.auth, idx.email, password);
+      } catch (e) {
         showAuthError('login-error', 'Incorrect password.');
         return;
       }
+
+      const record = await getUser(username);
+      if (!record) {
+        showAuthError('login-error', "Account data missing — please contact support.");
+        return;
+      }
+
+      // Auto-assign this person as the partner if the room exists but hasn't met the partner yet
+      if (record.uid && record.roomId) {
+        const room = await getRoom(record.roomId);
+        if (room && room.ownerUid && !room.partnerUid && room.ownerUid !== record.uid) {
+          await saveRoom(record.roomId, { partnerUid: record.uid });
+        }
+      }
+
       await enterWhoAmI(username, record.roomId);
     } catch (e) {
       showAuthError('login-error', "Couldn't reach the server — check your connection and try again.");
