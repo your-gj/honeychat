@@ -159,7 +159,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 setPersistence(auth, browserSessionPersistence).catch(() => {});
 
-const ADMIN_UIDS = ['ORKHNrMyR0TJXmQKIrWR2XThp8D3', 'GbK90OSEJJVLutjv79X5gHzbM5G2'];
+const ADMIN_UIDS = ['aPKBbUDvncbEOEBDwErTEXB5OQ42', 'IQLQDG9jqWV3pxSoTO7IccHaqXx1'];
 const ADMIN_USERNAMES = ['gautam', 'hemane'];
 
 function $(id) { return document.getElementById(id); }
@@ -199,7 +199,7 @@ $('btn-admin-login').addEventListener('click', async () => {
       cred = await signInWithEmailAndPassword(auth, idx.email, password);
     }
     if (!ADMIN_UIDS.includes(cred.user.uid)) {
-      showErr(errEl, "This account isn't authorized for admin access.");
+      showErr(errEl, "This account isn't authorized for admin access. Its UID is: " + cred.user.uid);
       btn.disabled = false; btn.textContent = 'Log in';
       return;
     }
